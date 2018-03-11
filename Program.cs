@@ -6,33 +6,49 @@ namespace Async
     {
         static void Main(string[] args)
         {
-            PrintDoubleString("Hello");
+            //PrintDoubleString("Hello");
+
+            // Task.Factory.StartNew(() =>
+            // {
+            //     Console.WriteLine(GetFullStringAsync("Hello-Async").Result);
+
+            // });
+            // Task.Factory.StartNew(() =>
+            // {
+            //     Console.WriteLine(GetFullStringAsync("Hello-Async").Result);
+
+            // });
+
+            
+            // Task.WaitAll( PrintDoubleString("Hello"), PrintDoubleString("Hello"));
 
             Action<string> a1=new Action<string>((x)=>{
                 Console.WriteLine(x+" "+x); 
             });
-            Task.Run(()=>a1("Hello1"));
+            Task.WaitAll(Task.Factory.StartNew(()=>a1("Hello-Action<>")));
 
-            Func<string,Task<string>> f1=new Func<string,Task<string>>(async (x)=>{
-                return await GetFullStringAsync(x);
+            Func<string,Task<string>> f1=new Func<string, Task<string>>((x)=>{
+                return Task.Factory.StartNew(() => GetFullString(x));
             });
+            
+            Console.WriteLine(Task.Factory.StartNew(()=>f1("Hello-Func<>")).Result.Result);
+            //System.Threading.Thread.Sleep(3000);
+            Console.WriteLine("Main function finish");
 
-            var res=Task.Factory.StartNew(()=>f1("hello2"));
-            Console.WriteLine(res.Result.Result);
-            System.Threading.Thread.Sleep(1000);
         }
 
         public static string GetFullString(string s)
         {
-            return s+" "+s;
+            System.Threading.Thread.Sleep(2000);
+            return s + " " + s;
         }
 
         public static Task<string> GetFullStringAsync(string s)
         {
-            return Task.Run(()=>GetFullString(s));
+            return Task.Factory.StartNew(() => GetFullString(s));
         }
 
-        public static async void PrintDoubleString(string s)
+        public static async Task PrintDoubleString(string s)
         {
             Console.WriteLine(await GetFullStringAsync(s));
         }
