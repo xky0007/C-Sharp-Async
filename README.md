@@ -84,12 +84,12 @@ Action<string> a1=new Action<string>((x)=>{
 });
 Task.WaitAll(Task.Factory.StartNew(()=>a1("Hello-Action<>")));
 
- Func<string,Task<string>> f1=new Func<string, Task<string>>((x)=>{
-     return Task.Factory.StartNew(() => GetFullString(x));
- });
- 
- Console.WriteLine(Task.Factory.StartNew(()=>f1("Hello-Func<>")).Result.Result);
- ```
+Func<string,Task<string>> f1=new Func<string, Task<string>>((x)=>{
+    return Task.Factory.StartNew(() => GetFullString(x));
+});
+
+Console.WriteLine(Task.Factory.StartNew(()=>f1("Hello-Func<>")).Result.Result);
+```
  
  If you run the code, should see
 ```
